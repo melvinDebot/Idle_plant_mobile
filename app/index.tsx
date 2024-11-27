@@ -41,10 +41,7 @@ export default function Index() {
         <LevelIndicator level={0} progress={50} />
       </LayoutTop>
       <LayoutMiddle>
-        <PlantGrowthScreen
-          levelUser={1}
-          
-        />
+        <PlantGrowthScreen levelUser={1}/>
       </LayoutMiddle>
       <LayoutText>Booster</LayoutText>
       <LayoutBottom>

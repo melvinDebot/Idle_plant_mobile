@@ -9,7 +9,7 @@ export const LayoutContainer = styled(View)`
 
 export const LayoutTop = styled(View)`
   flex: 0.3;
-  padding-top: 50px;
+  padding-top: 30px;
 
   display: flex;
   justify-content: flex-end;
@@ -26,8 +26,8 @@ export const LayoutText = styled(Text)`
   font-size: 21px;
   color: black;
   font-family: GalanoGrotesqueSemiBold;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 

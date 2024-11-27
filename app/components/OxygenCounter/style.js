@@ -23,6 +23,7 @@ export const OxygenCounterText = styled(Text)`
 
 export const OxygenCounterImage = styled(Image)`
   width: 15px;
+  height: 15px;
 
 `;
 
