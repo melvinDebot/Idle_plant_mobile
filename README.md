@@ -1,50 +1,127 @@
-# Welcome to your Expo app 👋
+# 🌱 Idle Plant Mobile
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Bienvenue dans **Plant Growth Clicker Game**, une application mobile construite avec React Native ! Le but de ce jeu est de cultiver une plante en utilisant divers boosters et actions. Chaque mise à niveau aide votre plante à grandir et à produire plus d'oxygène !
 
-## Get started
+---
 
-1. Install dependencies
+## 🖼️ Aperçu de l'application
 
-   ```bash
-   npm install
-   ```
 
-2. Start the app
 
-   ```bash
-    npx expo start
-   ```
+### Captures d'écran
 
-In the output, you'll find options to open the app in a
+| Écran Principal | Détails des Boosters | Mise à Niveau en Action |
+| --------------- | -------------------- | ----------------------- |
+|                 |                      |                         |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🚀 Installation
 
-## Get a fresh project
+Suivez les étapes ci-dessous pour configurer et exécuter le projet en local.
 
-When you're ready, run:
+### Prérequis
+
+- **Node.js** (version recommandée : 16.x ou plus)
+- **npm** ou **yarn** (dernier disponible)
+- **React Native CLI**
+- **Android Studio** (pour émulateur Android) ou **Xcode** (pour simulateur iOS)
+
+### Étape 1 : Clôner le dépôt
 
 ```bash
-npm run reset-project
+git clone https://github.com/username/plant-growth-clicker.git
+cd idle_plant_mobile
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Étape 2 : Installer les dépendances
 
-## Learn more
+Avec **npm** :
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+npm install
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Ou avec **yarn** :
 
-## Join the community
+```bash
+yarn install
+```
 
-Join our community of developers creating universal apps.
+### Étape 3 : Lancer l'application
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+#### Sur Android
+
+1. Assurez-vous que l'émulateur Android est lancé (ou un appareil physique connecté via USB).
+2. Exécutez :
+   ```bash
+   npx run android
+   ```
+
+#### Sur iOS
+
+1. Ouvrez le fichier `ios/PlantGrowthClicker.xcworkspace` dans Xcode.
+2. Exécutez l'application depuis Xcode ou tapez :
+   ```bash
+   npx run ios
+   ```
+
+### Étape 4 : Démarrer le serveur Metro
+
+Si le serveur Metro ne se lance pas automatiquement, utilisez :
+
+```bash
+npx run start
+```
+
+---
+
+## 🛠️ Fonctionnalités
+
+- **Arrosage, pulvérisation et engrais** : Augmentez la production d'oxygène.
+- **Pluie et Soleil** : Activez des boosts temporaires pour accélérer la croissance.
+- **Mise à niveau des boosters** : Améliorez vos outils pour produire encore plus d'oxygène.
+- **Progression à long terme** : Atteignez de nouveaux niveaux et débloquez des fonctionnalités avancées.
+
+---
+
+## 📁 Structure des fichiers
+
+Voici un aperçu de la structure principale du projet :
+
+```plaintext
+src/
+├── components/            # Composants réutilisables (OxygenCounter, BoosterCard, etc.)
+├── screens/               # Ecrans principaux (PlantGrowthScreen)
+├── assets/                # Images et icônes
+├── styles/                # Fichiers de styles centralisés
+├── utils/                 # Fonctions utilitaires
+```
+
+---
+
+## 🛡️ Contribution
+
+Les contributions sont les bienvenues ! Si vous souhaitez contribuer :
+
+1. Forkez ce dépôt.
+2. Créez une branche de fonctionnalité : `git checkout -b nouvelle-fonctionnalite`.
+3. Faites vos modifications et committez : `git commit -m "Ajout d'une nouvelle fonctionnalité"`.
+4. Envoyez une pull request.
+
+---
+
+## 📜 Licence
+
+Ce projet est sous licence **MIT**. Consultez le fichier [LICENSE](./LICENSE) pour plus de détails.
+
+---
+
+## 📞 Support
+
+Pour toute question ou problème, n'hésitez pas à créer une [issue](https://github.com/username/plant-growth-clicker/issues) ou à contacter l'équipe à l'adresse : [support@plantclicker.com](mailto\:support@plantclicker.com).
+
+---
+
+Merci d'avoir choisi **Plant Growth Clicker Game** ! 🌿 Happy clicking!
+
