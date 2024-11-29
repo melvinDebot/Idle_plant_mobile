@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import dataJson from "../utils/data.json"
 import type { ItemCardType } from "./utils/type";
 
 type UserContextType = {
@@ -6,6 +8,7 @@ type UserContextType = {
   currentOxygen: number; // Quantité d'oxygène actuelle (utilisable)
   totalOxygenForNextLevel: number; // Quantité totale d'oxygène nécessaire pour passer au niveau suivant
   currentOxygenForNextLevel: number; // Progrès accumulé vers le niveau suivant
+  activeItems: ItemCardType[]; // Liste des items actifs
   incrementOxygen: (amount: number) => void; // Fonction pour ajouter de l'oxygène
   incrementLevel: () => void; // Fonction pour augmenter le niveau utilisateur
   getOxygenPerSeconds: (item: ItemCardType) => number; // Fonction pour récupérer oxygenPerSeconds
@@ -13,7 +16,9 @@ type UserContextType = {
   getUpgradeCost: (item: ItemCardType) => number; // Fonction pour récupérer upgradeCost
   decrementOxygen: (amount: number) => void; // Fonction pour décrémenter l'oxygène
   setActiveItems: (items: ItemCardType[]) => void; // Fonction pour définir les items actifs
-  incrementCardLevel: (item: ItemCardType) => () => void; // Fonction pour augmenter le niveau de la carte
+  incrementCardLevel: (item: ItemCardType) => void; // Fonction pour augmenter le niveau de la carte
+  resetGame: () => void; // Fonction pour réinitialiser le jeu
+  dataGame: { cards: ItemCardType[] }; // Données de jeu
 };
 
 // Création du contexte
@@ -24,15 +29,57 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [userLevel, setUserLevel] = useState<number>(0); // Niveau de départ
   const [currentOxygen, setCurrentOxygen] = useState<number>(0); // Oxygène disponible
   const [progressOxygen, setProgressOxygen] = useState<number>(0); // Progrès d'oxygène accumulé
-  const [totalOxygenForNextLevel, setTotalOxygenForNextLevel] = useState<
-    number
-  >(100); // Oxygène requis pour passer au niveau suivant
-  const [activeItems, setActiveItems] = useState<ItemCardType[]>([]); // Liste des items actifs
+  const [totalOxygenForNextLevel, setTotalOxygenForNextLevel] = useState<number>(100); // Oxygène requis pour passer au niveau suivant
+  const [activeItems, setActiveItems] = useState<ItemCardType[]>(dataJson.cards); // Liste des items actifs
+  const [dataGame, setDataGame] = useState<{ cards: ItemCardType[] }>({cards: dataJson.cards});
 
-  const currentOxygenForNextLevel = Math.min(
-    progressOxygen,
-    totalOxygenForNextLevel
-  );
+  const currentOxygenForNextLevel = Math.min(progressOxygen, totalOxygenForNextLevel);
+
+  // Charger les données initiales à partir de AsyncStorage
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const savedLevel = await AsyncStorage.getItem("userLevel");
+        const savedOxygen = await AsyncStorage.getItem("currentOxygen");
+        const savedProgress = await AsyncStorage.getItem("progressOxygen");
+        const savedTotal = await AsyncStorage.getItem("totalOxygenForNextLevel");
+        const savedItems = await AsyncStorage.getItem("activeItems");
+        const savedDataGame = await AsyncStorage.getItem("dataGame");
+
+        if (savedLevel !== null) setUserLevel(parseInt(savedLevel, 10));
+        if (savedOxygen !== null) setCurrentOxygen(parseInt(savedOxygen, 10));
+        if (savedProgress !== null) setProgressOxygen(parseInt(savedProgress, 10));
+        if (savedTotal !== null) setTotalOxygenForNextLevel(parseInt(savedTotal, 10));
+        if (savedItems !== null) setActiveItems(JSON.parse(savedItems));
+        if (savedDataGame !== null) setDataGame(JSON.parse(savedDataGame));
+      } catch (error) {
+        console.error("Failed to load data from AsyncStorage", error);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  // Mettre à jour AsyncStorage chaque fois que les données de jeu changent
+  useEffect(() => {
+    AsyncStorage.setItem("userLevel", userLevel.toString());
+  }, [userLevel]);
+
+  useEffect(() => {
+    AsyncStorage.setItem("currentOxygen", currentOxygen.toString());
+  }, [currentOxygen]);
+
+  useEffect(() => {
+    AsyncStorage.setItem("progressOxygen", progressOxygen.toString());
+  }, [progressOxygen]);
+
+  useEffect(() => {
+    AsyncStorage.setItem("totalOxygenForNextLevel", totalOxygenForNextLevel.toString());
+  }, [totalOxygenForNextLevel]);
+
+  useEffect(() => {
+    AsyncStorage.setItem("activeItems", JSON.stringify(activeItems));
+  }, [activeItems]);
 
   const incrementOxygen = (amount: number) => {
     setCurrentOxygen((prevOxygen) => prevOxygen + amount); // Ajoute à l'oxygène utilisable
@@ -48,57 +95,28 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  {/* TODO FIX LEVEL */}
-  const incrementCardLevel = (item: ItemCardType) => {
-    if (item.levelCard >= 50) return;
-
-    const interval = setInterval(() => {
-      setActiveItems((prevItems) => {
-        return prevItems.map((prevItem) => {
-          if (prevItem.id === item.id) {
-            const newLevel = prevItem.levelCard + 1;
-            const newOxygenPerSeconds = prevItem.oxygenPerSeconds + 1; // Ajustez la logique selon vos besoins
-            return {
-              ...prevItem,
-              levelCard: newLevel,
-              oxygenPerSeconds: newOxygenPerSeconds,
-            };
-          }
-          return prevItem;
-        });
-      });
-    }, 1000);
-
-    return () => clearInterval(interval);
-  };
-
   const incrementLevel = () => {
-    setUserLevel((prevLevel) => prevLevel + 1);
-    setTotalOxygenForNextLevel((prevTotal) => Math.floor(prevTotal * 1.5));
-  };
-
-  const decrementOxygen = (amount: number): void => {
-    setCurrentOxygen((prevOxygen) => {
-      if (prevOxygen < amount) {
-        console.warn("Not enough oxygen to perform this action.");
-        return prevOxygen;
+    setUserLevel((prevLevel) => {
+      const newLevel = prevLevel + 1;
+      if (newLevel >= 100) {
+        return 100; // Niveau maximum
       }
+      return newLevel;
+    });
 
-      return Math.max(0, prevOxygen - amount);
+    setTotalOxygenForNextLevel((prevTotal) => {
+      // Ajustez la logique selon vos besoins pour ralentir la progression
+      const newTotal = prevTotal * 1.2; // Par exemple, augmentez de 20% à chaque niveau
+      return Math.floor(newTotal);
     });
   };
 
+  const decrementOxygen = (amount: number): void => {
+    setCurrentOxygen((prevOxygen) => Math.max(prevOxygen - amount, 0));
+  };
+
   const getOxygenPerSeconds = (item: ItemCardType): number => {
-    if (!item.oxygenPerSeconds || item.oxygenPerSeconds.length === 0) {
-      return 0;
-    }
-
-    const index = Math.max(
-      0,
-      Math.min(userLevel - item.levelRequired, item.oxygenPerSeconds.length - 1)
-    );
-
-    return item.oxygenPerSeconds[index];
+    return item.oxygenPerSeconds;
   };
 
   const getOxygenRequired = (item: ItemCardType): number => {
@@ -125,33 +143,68 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     return item.upgradeCost[index];
   };
 
- // --- NOUVEAU : Incrément automatique d'oxygène basé sur oxygenPerSeconds ---
-useEffect(() => {
-  const interval = setInterval(() => {
-    // Filtre les items actifs en fonction du niveau requis
-    const filteredItems = activeItems.filter(item => userLevel >= item.levelRequired);
-    // Calcule le total d'oxygène par seconde à partir des items actifs filtrés
-    const totalOxygenPerSecond = filteredItems.reduce((total, item) => {
-      const oxygenPerSecond = getOxygenPerSeconds(item);
-      return total + oxygenPerSecond;
-    }, 0);
+  const incrementCardLevel = (item: ItemCardType) => {
+    setActiveItems((prevItems) => {
+      const updatedItems = prevItems.map((prevItem) => {
+        if (prevItem.id === item.id && prevItem.levelCard < item.levelMax) {
+          const newLevel = prevItem.levelCard + 1;
+          const newOxygenPerSeconds = prevItem.oxygenPerSeconds + 1; // Ajustez la logique selon vos besoins
+          return {
+            ...prevItem,
+            levelCard: newLevel,
+            oxygenPerSeconds: newOxygenPerSeconds,
+          };
+        }
+        return prevItem;
+      });
+      AsyncStorage.setItem("activeItems", JSON.stringify(updatedItems)); // Sauvegarder les items mis à jour
+      return updatedItems;
+    });
+  };
 
-    // Ajoute cet oxygène automatiquement
-    if (totalOxygenPerSecond > 0) {
-      incrementOxygen(totalOxygenPerSecond);
+  const resetGame = async () => {
+    try {
+      await AsyncStorage.setItem("userLevel", "0");
+      await AsyncStorage.setItem("currentOxygen", "0");
+      await AsyncStorage.setItem("progressOxygen", "0");
+      await AsyncStorage.setItem("totalOxygenForNextLevel", "100");
+      await AsyncStorage.setItem("activeItems", JSON.stringify([]));
+      await AsyncStorage.setItem("dataGame", JSON.stringify(dataJson));
+
+      setUserLevel(0);
+      setCurrentOxygen(0);
+      setProgressOxygen(0);
+      setTotalOxygenForNextLevel(100);
+      setActiveItems(dataJson.cards);
+    } catch (error) {
+      console.error("Failed to reset data in AsyncStorage", error);
     }
-  }, 1000); // Toutes les 1 seconde
+  };
 
-  // Nettoyage de l'intervalle lors du démontage
-  return () => clearInterval(interval);
-}, [activeItems, userLevel]); // Redémarre si les items actifs ou le niveau changent
-  // --------------------------------------------------------------------------
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const filteredItems = activeItems.filter(item => userLevel >= item.levelRequired);
+
+      const totalOxygenPerSecond = filteredItems.reduce((total, item) => {
+        const oxygenPerSecond = getOxygenPerSeconds(item);
+        return total + oxygenPerSecond;
+      }, 0);
+
+      if (totalOxygenPerSecond > 0) {
+        incrementOxygen(totalOxygenPerSecond);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [activeItems, userLevel]);
 
   const value = {
     userLevel,
     currentOxygen,
     totalOxygenForNextLevel,
     currentOxygenForNextLevel,
+    activeItems,
+    dataGame,
     incrementOxygen,
     decrementOxygen,
     incrementLevel,
@@ -159,10 +212,15 @@ useEffect(() => {
     getOxygenRequired,
     getUpgradeCost,
     setActiveItems,
-    incrementCardLevel
+    incrementCardLevel,
+    resetGame
   };
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return (
+    <UserContext.Provider value={value}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 // Hook personnalisé pour utiliser le contexte

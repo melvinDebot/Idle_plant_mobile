@@ -11,7 +11,8 @@ import {
 
 import oxygenImage from "../../../assets/images/Oxygen.png";
 
-import type {ButtonType} from "../../utils/type"
+import type { ButtonType } from "../../utils/type"
+import formatNumber from "../../utils/function";
 
 interface LevelIndicatorProps {
   buttonType: ButtonType;
@@ -98,7 +99,7 @@ const Button: React.FC<LevelIndicatorProps> = ({
             <ButtonText>Upgrade</ButtonText>
             <ButtonContainerOxygenText>
               <ButtonImage source={oxygenImage} />
-              <ButtonText>{oxygen}</ButtonText>
+              <ButtonText>{formatNumber(oxygen)}</ButtonText>
             </ButtonContainerOxygenText>
           </ButtonContainerText>
         </ButtonContainer>

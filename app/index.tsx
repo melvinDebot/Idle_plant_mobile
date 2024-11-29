@@ -22,10 +22,10 @@ import GalanoGrotesqueSemiBold from "../assets/fonts/GalanoGrotesque-SemiBold.tt
 // TYPES
 import type {ItemCardType} from "./utils/type"
 
-// DATA GAME
-import dataGame from "./utils/data.json"
+// UTILS
 import getImageCard from "./utils/getImageCard";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useUserContext } from "./context/UserContext";
 
@@ -34,20 +34,45 @@ export default function Index() {
   const {
     userLevel,
     currentOxygen,
+    activeItems,
+    currentOxygenForNextLevel,
+    totalOxygenForNextLevel,
     getOxygenPerSeconds,
     getUpgradeCost,
     getOxygenRequired,
-    currentOxygenForNextLevel,
-    totalOxygenForNextLevel,
     decrementOxygen,
-    setActiveItems
+    setActiveItems,
+    incrementCardLevel,
+    // resetGame, 
+    dataGame
   } = useUserContext();
 
-  useEffect(() => {
-  if (dataGame && dataGame.cards) {
-    setActiveItems(dataGame.cards);
+  const handlePressItem = (item: ItemCardType) => { 
+    decrementOxygen(getUpgradeCost(item))
+    incrementCardLevel(item)
   }
-}, [userLevel, dataGame]);
+
+  useEffect(() => {
+    const initializeActiveItems = async () => {
+      const savedItems = await AsyncStorage.getItem("activeItems");
+      if (savedItems) {
+        setActiveItems(JSON.parse(savedItems));
+      } else if (dataGame && dataGame.cards) {
+        setActiveItems(dataGame.cards);
+      }
+    };
+
+    initializeActiveItems();
+  }, [dataGame, setActiveItems]);
+
+
+  const itemsToDisplay = activeItems.length > 0 ? activeItems : dataGame.cards;
+
+  //RESET GAME
+  // useEffect(() => {
+  //   resetGame()
+  // }, [])
+
 
   const [loaded] = useFonts({
     GalanoGrotesqueMedium,
@@ -58,6 +83,8 @@ export default function Index() {
   if (!loaded) {
     return null;
   }
+
+  
 
 
   return (
@@ -76,7 +103,7 @@ export default function Index() {
       <LayoutText>Booster</LayoutText>
       <LayoutBottom>
         <LayoutBottomScoll>
-          {dataGame.cards.map((item: ItemCardType, index: number) => (
+          {itemsToDisplay.map((item: ItemCardType, index: number) => (
             <Card
               key={index}
               levelCardRequired={item.levelRequired}
@@ -87,10 +114,9 @@ export default function Index() {
               buttonType={item.type}
               upgradeCost={getOxygenRequired(item)}
               isDisabled={userLevel < item.levelRequired || currentOxygen < getOxygenRequired(item)}
-             
               levelUser={userLevel}
               timer={item?.timer}
-              onPress={() => decrementOxygen(getUpgradeCost(item))}
+              onPress={() => handlePressItem(item)}
             />
           ))}
           
