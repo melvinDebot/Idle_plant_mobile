@@ -9,10 +9,17 @@ import {
 
 interface LevelIndicatorProps {
   level: number;
-  progress: number;
+  currentOxygenForNextLevel: number;
+  totalOxygenForNextLevel: number;
 }
 
-const LevelIndicator: React.FC<LevelIndicatorProps> = ({ level, progress }) => {
+const LevelIndicator: React.FC<LevelIndicatorProps> = ({
+  level,
+  currentOxygenForNextLevel,
+  totalOxygenForNextLevel,
+}) => {
+  const progress = (currentOxygenForNextLevel / totalOxygenForNextLevel) * 100;
+
   return (
     <LevelIndicatorContainer>
       <LevelIndicatorText>Level {level}</LevelIndicatorText>

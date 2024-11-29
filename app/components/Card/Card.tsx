@@ -10,16 +10,20 @@ import {
 
 import Button from "../Button/Button";
 
+import type {ButtonType} from "../../utils/type"
+
 interface CardProps {
   image: string;
   title: string;
   level: number;
   numberOxygen: number;
-  buttonType: "upgrade" | "timer" | "level";
+  buttonType: ButtonType;
+  upgradeCost: number;
   isDisabled: boolean;
-  levelRequired?: number;
+  levelCardRequired: number;
   levelUser: number;
   timer?: string;
+  onPress?: () => void;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -29,25 +33,28 @@ const Card: React.FC<CardProps> = ({
   numberOxygen,
   buttonType,
   isDisabled,
-  levelRequired,
   levelUser,
   timer,
+  upgradeCost,
+  levelCardRequired,
+  onPress
 }) => {
   return (
     <CardContainer>
       <CardImage source={image} />
       <CardTextContainer>
         <CardTitle>{title}</CardTitle>
-        <CardSubTitle>Level {level}</CardSubTitle>
+        {/* TODO FIX LEVEL */}
+        <CardSubTitle>Level  {level}</CardSubTitle>
         <CardText>{numberOxygen} oxygen / s</CardText>
       </CardTextContainer>
       <Button
-        buttonType={buttonType}
+        buttonType={levelUser < levelCardRequired ? "level" : buttonType}
         isDisabled={isDisabled}
-        levelRequired={levelRequired ?? 0}
-        levelUser={levelUser}
-        oxygen={numberOxygen}
+        levelRequired={levelCardRequired}
+        oxygen={upgradeCost}
         timer={timer ?? "00:00"}
+        onPress={onPress}
       />
     </CardContainer>
   );

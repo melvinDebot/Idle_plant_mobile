@@ -1,0 +1,131 @@
+{
+  "cards": [
+    {
+      "id": 1,
+      "title": "Arroser la plante",
+      "levelRequired": 1,
+      "levelMax": 50,
+      "levelCard": 0,
+      "oxygenPerSeconds": [2, 4, 6, 8],
+      "oxygenRequired": [10, 20, 40, 50],
+      "upgradeCost": [8, 20, 40, 50],
+      "type": "upgrade",
+      "imageKey": "watering_can"
+    },
+    {
+      "id": 2,
+      "title": "Pulvérisateur",
+      "levelRequired": 5,
+      "levelMax": 50,
+      "levelCard": 0,
+      "oxygenPerSeconds": [3, 6, 9, 12],
+      "oxygenRequired": [50, 100, 200, 400],
+      "upgradeCost": [20, 30, 50, 80],
+      "type": "upgrade",
+      "imageKey": "spray"
+    },
+    {
+      "id": 3,
+      "title": "Engrais",
+      "levelRequired": 10,
+      "levelMax": 50,
+      "levelCard": 0,
+      "oxygenPerSeconds": [5, 10, 15, 20],
+      "oxygenRequired": [100, 250, 500, 1000],
+      "upgradeCost": [50, 100, 200, 300],
+      "type": "upgrade",
+      "imageKey": "fertilizer"
+    },
+    // {
+    //   "id": 4,
+    //   "title": "Soleil",
+    //   "levelRequired": 15,
+    //   "levelMax": 1,
+    //   "levelCard": 0,
+    //   "oxygenPerSeconds": [5, 10, 15, 20],
+    //   "oxygenRequired": [100, 250, 500, 1000],
+    //   "upgradeCost": [50, 100, 200, 300],
+    //   "boostDuration": 30,
+    //   "boostOxygenPerSeconds": 10,
+    //   "type": "timer",
+    //   "timer": "00:30",
+    //   "imageKey": "sun"
+    // },
+    // {
+    //   "id": 5,
+    //   "title": "Pluie",
+    //   "levelRequired": 20,
+    //   "levelMax": 1,
+    //   "levelCard": 0,
+    //   "oxygenPerSeconds": [5, 10, 15, 20],
+    //   "oxygenRequired": [1000],
+    //   "upgradeCost": [50, 100, 200, 300],
+    //   "boostDuration": 20,
+    //   "boostOxygenPerSeconds": 20,
+    //   "type": "timer",
+    //   "timer": "00:60",
+    //   "imageKey": "rain"
+    // },
+    {
+      "id": 6,
+      "title": "Mauvaises herbes",
+      "levelRequired": 10,
+      "levelMax": 50,
+      "levelCard": 0,
+      "oxygenPerSeconds": [5, 10, 15, 20],
+      "oxygenRequired": [100, 250, 500, 1000],
+      "upgradeCost": [50, 100, 200, 300],
+      "type": "upgrade",
+      "imageKey": "weed"
+    },
+    {
+      "id": 7,
+      "title": "Changer de pot",
+      "levelRequired": 20,
+      "levelMax": 50,
+      "levelCard": 0,
+      "oxygenRequired": [500, 1000, 2000, 5000],
+      "upgradeCost": [100, 200, 500, 1000],
+      "effect": "increaseCapacity",
+      "effectValue": [10, 20, 30, 40],
+      "type": "upgrade",
+      "imageKey": "pot"
+    },
+    {
+      "id": 8,
+      "title": "Fruit",
+      "levelRequired": 30,
+      "levelMax": 50,
+      "levelCard": 0,
+      "oxygenPerSeconds": [20, 40, 60, 80],
+      "oxygenRequired": [1000, 2500, 5000, 10000],
+      "upgradeCost": [300, 500, 800, 1500],
+      "type": "upgrade",
+      "imageKey": "pot"
+    },
+    {
+      "id": 9,
+      "title": "Jardinier",
+      "levelRequired": 40,
+      "levelMax": 50,
+      "levelCard": 0,
+      "oxygenPerSeconds": [50, 100, 150, 200],
+      "oxygenRequired": [5000, 10000, 20000, 50000],
+      "upgradeCost": [1000, 2000, 3000, 5000],
+      "type": "upgrade",
+      "imageKey": "gardener"
+    },
+    {
+      "id": 10,
+      "title": "Pollinisateur",
+      "levelRequired": 50,
+      "levelMax": 50,
+      "levelCard": 0,
+      "oxygenPerSeconds": [100, 200, 300, 400],
+      "oxygenRequired": [10000, 25000, 50000, 100000],
+      "upgradeCost": [2500, 5000, 8000, 10000],
+      "type": "upgrade",
+      "imageKey": "pollinator"
+    }
+  ]
+}

@@ -11,25 +11,26 @@ import {
 
 import oxygenImage from "../../../assets/images/Oxygen.png";
 
+import type {ButtonType} from "../../utils/type"
+
 interface LevelIndicatorProps {
-  buttonType: "upgrade" | "timer" | "level";
+  buttonType: ButtonType;
   isDisabled: boolean;
   levelRequired: number;
-  levelUser: number;
   oxygen: number;
   timer: string;
+  onPress?: () => void;
 }
 
 const Button: React.FC<LevelIndicatorProps> = ({
   levelRequired,
-  levelUser,
   buttonType,
   isDisabled,
   oxygen,
   timer,
+  onPress
 }) => {
   // Vérification si le niveau de l'utilisateur est suffisant
-  const isButtonDisabled = levelUser < levelRequired;
 
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(timer);
@@ -92,7 +93,7 @@ const Button: React.FC<LevelIndicatorProps> = ({
   switch (buttonType) {
     case "upgrade":
       return (
-        <ButtonContainer disabled={isDisabled || isButtonDisabled}>
+        <ButtonContainer disabled={isDisabled} onPress={onPress}>
           <ButtonContainerText>
             <ButtonText>Upgrade</ButtonText>
             <ButtonContainerOxygenText>

@@ -7,7 +7,7 @@ import {
   LayoutBottomScoll,
 } from "./style";
 import { useFonts } from "expo-font";
-import React from "react";
+import React, { useEffect } from "react";
 
 import OxygenCounter from "./components/OxygenCounter/OxygenCounter";
 import LevelIndicator from "./components/LevelIndicator/LevelIndicator";
@@ -19,11 +19,36 @@ import GalanoGrotesqueMedium from "../assets/fonts/GalanoGrotesque-Medium.ttf";
 import GalanoGrotesqueRegular from "../assets/fonts/GalanoGrotesque-Regular.ttf";
 import GalanoGrotesqueSemiBold from "../assets/fonts/GalanoGrotesque-SemiBold.ttf";
 
-// IMAGES
-import WaterCanImg from "../assets/images/cards/watering_can.png";
+// TYPES
+import type {ItemCardType} from "./utils/type"
+
+// DATA GAME
+import dataGame from "./utils/data.json"
+import getImageCard from "./utils/getImageCard";
+
+
+import { useUserContext } from "./context/UserContext";
 
 
 export default function Index() {
+  const {
+    userLevel,
+    currentOxygen,
+    getOxygenPerSeconds,
+    getUpgradeCost,
+    getOxygenRequired,
+    currentOxygenForNextLevel,
+    totalOxygenForNextLevel,
+    decrementOxygen,
+    setActiveItems
+  } = useUserContext();
+
+  useEffect(() => {
+  if (dataGame && dataGame.cards) {
+    setActiveItems(dataGame.cards);
+  }
+}, [userLevel, dataGame]);
+
   const [loaded] = useFonts({
     GalanoGrotesqueMedium,
     GalanoGrotesqueRegular,
@@ -34,81 +59,41 @@ export default function Index() {
     return null;
   }
 
+
   return (
     <LayoutContainer>
       <LayoutTop>
-        <OxygenCounter count={5} />
-        <LevelIndicator level={0} progress={50} />
+        <OxygenCounter count={currentOxygen} />
+        <LevelIndicator
+        level={userLevel}
+        currentOxygenForNextLevel={currentOxygenForNextLevel}
+        totalOxygenForNextLevel={totalOxygenForNextLevel}
+      />
       </LayoutTop>
       <LayoutMiddle>
-        <PlantGrowthScreen levelUser={1}/>
+        <PlantGrowthScreen levelUser={userLevel} />
       </LayoutMiddle>
       <LayoutText>Booster</LayoutText>
       <LayoutBottom>
         <LayoutBottomScoll>
-          <Card
-            image={WaterCanImg}
-            title="Arroser la plante"
-            level={10}
-            numberOxygen={5}
-            buttonType="upgrade"
-            isDisabled={false}
-            levelRequired={5}
-            levelUser={5}
-            timer="00:30"
-          />
-          <Card
-            image={WaterCanImg}
-            title="Arroser la plante"
-            level={10}
-            numberOxygen={10}
-            buttonType="upgrade"
-            isDisabled={false}
-            levelRequired={5}
-            levelUser={5}
-          />
-          <Card
-            image={WaterCanImg}
-            title="Arroser la plante"
-            level={10}
-            numberOxygen={10}
-            buttonType="upgrade"
-            isDisabled={true}
-            levelRequired={5}
-            levelUser={5}
-          />
-          <Card
-            image={WaterCanImg}
-            title="Arroser la plante"
-            level={10}
-            numberOxygen={10}
-            buttonType="level"
-            isDisabled={true}
-            levelRequired={5}
-            levelUser={5}
-          />
-          <Card
-            image={WaterCanImg}
-            title="Arroser la plante"
-            level={10}
-            numberOxygen={10}
-            buttonType="timer"
-            isDisabled={true}
-            levelRequired={5}
-            levelUser={5}
-            timer="00:30"
-          />
-          <Card
-            image={WaterCanImg}
-            title="Arroser la plante"
-            level={10}
-            numberOxygen={10}
-            buttonType="timer"
-            isDisabled={true}
-            levelRequired={5}
-            levelUser={5}
-            timer="00:60"
-          />
+          {dataGame.cards.map((item: ItemCardType, index: number) => (
+            <Card
+              key={index}
+              levelCardRequired={item.levelRequired}
+              image={getImageCard(item.imageKey)}
+              title={item.title}
+              level={item.levelCard}
+              numberOxygen={getOxygenPerSeconds(item)} 
+              buttonType={item.type}
+              upgradeCost={getOxygenRequired(item)}
+              isDisabled={userLevel < item.levelRequired || currentOxygen < getOxygenRequired(item)}
+             
+              levelUser={userLevel}
+              timer={item?.timer}
+              onPress={() => decrementOxygen(getUpgradeCost(item))}
+            />
+          ))}
+          
         </LayoutBottomScoll>
       </LayoutBottom>
     </LayoutContainer>

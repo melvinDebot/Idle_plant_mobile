@@ -10,6 +10,7 @@ import LottieView from "lottie-react-native";
 // Import des animations
 import plantAnimation from "../../../assets/animation/Plant_animation.json";
 import flowerAnimation from "../../../assets/animation/Flower_animation.json";
+import { useUserContext } from "@/app/context/UserContext";
 
 // Interface pour définir la structure des animations
 interface AnimationData {
@@ -23,6 +24,7 @@ interface PlantGrowthScreenProps {
 }
 
 const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({ levelUser }) => {
+  const { incrementOxygen } = useUserContext();
   const animation = useRef<LottieView>(null);
 
   // Liste des animations importées avec leur niveau
@@ -52,6 +54,7 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({ levelUser }) => {
   const handlePress = async () => {
     // Utilise un retour haptique de type "impact" avec force
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    incrementOxygen(1);
   };
 
   return (
