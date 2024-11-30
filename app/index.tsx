@@ -1,5 +1,4 @@
 import {
-  LayoutContainer,
   LayoutTop,
   LayoutBottom,
   LayoutMiddle,
@@ -29,6 +28,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useUserContext } from "./context/UserContext";
 
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StyleSheet } from "react-native";
+
 
 export default function Index() {
   const {
@@ -43,9 +45,11 @@ export default function Index() {
     decrementOxygen,
     setActiveItems,
     incrementCardLevel,
-    resetGame, 
+    // resetGame, 
     dataGame
   } = useUserContext();
+
+  const insets = useSafeAreaInsets();
 
   const handlePressItem = (item: ItemCardType) => { 
     decrementOxygen(getUpgradeCost(item))
@@ -58,6 +62,7 @@ export default function Index() {
       if (savedItems) {
         setActiveItems(JSON.parse(savedItems));
       } else if (dataGame && dataGame.cards) {
+        console.log("dataGame.cards", dataGame.cards)
         setActiveItems(dataGame.cards);
       }
     };
@@ -69,9 +74,9 @@ export default function Index() {
   const itemsToDisplay = activeItems.length > 0 ? activeItems : dataGame.cards;
 
   //RESET GAME
-  useEffect(() => {
-    resetGame()
-  }, [])
+  // useEffect(() => {
+  //   resetGame()
+  // }, [])
 
 
   const [loaded] = useFonts({
@@ -88,7 +93,7 @@ export default function Index() {
 
 
   return (
-    <LayoutContainer>
+    <SafeAreaView style={[styles.layoutContainer, { paddingTop: insets.top }]}>
       <LayoutTop>
         <OxygenCounter count={currentOxygen} />
         <LevelIndicator
@@ -102,8 +107,10 @@ export default function Index() {
       </LayoutMiddle>
       <LayoutText>Booster</LayoutText>
       <LayoutBottom>
-        <LayoutBottomScoll>
-          {itemsToDisplay.slice(0, 3).map((item: ItemCardType, index: number) => (
+        <LayoutBottomScoll
+          showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}>
+          {itemsToDisplay.map((item: ItemCardType, index: number) => (
             <Card
               key={index}
               levelCardRequired={item.levelRequired}
@@ -116,13 +123,23 @@ export default function Index() {
               isDisabled={userLevel < item.levelRequired || currentOxygen < getOxygenRequired(item)}
               levelUser={userLevel}
               timer={item?.timer}
-              isOverlay={index === 2}
+              
               onPress={() => handlePressItem(item)}
             />
           ))}
           
         </LayoutBottomScoll>
       </LayoutBottom>
-    </LayoutContainer>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  layoutContainer: {
+    flex: 1,
+    flexDirection: "column",
+    padding: 10,
+    backgroundColor: "white",
+    justifyContent: "flex-start",
+  },
+});

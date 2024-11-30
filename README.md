@@ -76,6 +76,15 @@ npx run start
 
 ---
 
+
+## 🛠️ Linting
+
+```bash
+npm run lint
+```
+
+---
+
 ## 🛠️ Fonctionnalités
 
 - **Arrosage, pulvérisation et engrais** : Augmentez la production d'oxygène.
@@ -91,11 +100,15 @@ Voici un aperçu de la structure principale du projet :
 
 ```plaintext
 src/
+├── assets/                # Images, icônes et animations
+│   ├── animation/         # Fichiers d'animation Lottie
+│   └── images/            # Images et icônes
 ├── components/            # Composants réutilisables (OxygenCounter, BoosterCard, etc.)
-├── screens/               # Ecrans principaux (PlantGrowthScreen)
-├── assets/                # Images et icônes
+├── context/               # Contexte pour les données utilisateur
+├── screens/               # Écrans principaux (PlantGrowthScreen)
 ├── styles/                # Fichiers de styles centralisés
 ├── utils/                 # Fonctions utilitaires
+└── App.tsx                # Point d'entrée principal de l'application
 ```
 
 ---
