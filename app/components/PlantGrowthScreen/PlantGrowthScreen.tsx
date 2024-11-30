@@ -1,22 +1,39 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   PlantGrowthScreenContainer,
   PlantGrowthScreenOverlay,
   PlantGrowthScreenItem1,
+  PlantGrowthScreenLayer,
 } from "./style";
 import * as Haptics from "expo-haptics";
-import LottieView from "lottie-react-native";
+import LottieView, { AnimatedLottieViewProps } from "lottie-react-native";
 
 // Import des animations
 import plantAnimation from "../../../assets/animation/Plant_animation.json";
 import flowerAnimation from "../../../assets/animation/Flower_animation.json";
+import firAnimation from "../../../assets/animation/fir_animation.json";
+import grassAnimation from "../../../assets/animation/grass_animation.json";
+import treeAnimation from "../../../assets/animation/tree_animation.json";
+
+// Import context pour récupérer les données de l'utilisateur
 import { useUserContext } from "@/app/context/UserContext";
+
+import { GestureResponderEvent } from "react-native";
+
+import BubbleAnimation from "../Bubble/Bubble";
 
 // Interface pour définir la structure des animations
 interface AnimationData {
   level: number;
-  // eslint-disable-next-line
-  source: any; // type de fichier d'animation (ex: JSON)
+  source: AnimatedLottieViewProps["source"]; // type de fichier d'animation (ex: JSON)
+  width: number;
+  height: number;
+}
+
+interface Bubble {
+  id: number;
+  x: number;
+  y: number;
 }
 
 interface PlantGrowthScreenProps {
@@ -26,12 +43,15 @@ interface PlantGrowthScreenProps {
 const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({ levelUser }) => {
   const { incrementOxygen } = useUserContext();
   const animation = useRef<LottieView>(null);
+  const [bubbles, setBubbles] = useState<Bubble[]>([]);
 
   // Liste des animations importées avec leur niveau
   const animationList: AnimationData[] = [
-    { level: 0, source: plantAnimation },
-    { level: 5, source: plantAnimation },
-    { level: 15, source: flowerAnimation },
+    { level: 0, source: plantAnimation, width: 100, height: 100 }, // plantAnimation 100 100
+    { level: 50, source: grassAnimation, width: 100, height: 100 },
+    { level: 200, source: flowerAnimation, width: 150, height: 150 },
+    { level: 500, source: treeAnimation, width: 100, height: 100 },
+    { level: 999, source: firAnimation, width: 150, height: 150 },
   ];
 
   // Fonction qui retourne l'animation la plus avancée possible pour le niveau de l'utilisateur
@@ -51,29 +71,50 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({ levelUser }) => {
     }
   }, [bestAnimation]);
 
-  const handlePress = async () => {
-    // Utilise un retour haptique de type "impact" avec force
+  const handlePress = async (event: GestureResponderEvent) => {
+    const { locationX, locationY } = event.nativeEvent;
+    const newBubble: Bubble = {
+      id: Date.now(),
+      x: locationX,
+      y: locationY,
+    };
+
+    // Utilisez un retour haptique de type "impact" avec force
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    // Ajoutez la bulle à l'état
+    setBubbles((prevBubbles) => [...prevBubbles, newBubble]);
+
+    // Supprimez la bulle après l'animation
+    setTimeout(() => {
+      setBubbles((prevBubbles) =>
+        prevBubbles.filter((bubble) => bubble.id !== newBubble.id)
+      );
+    }, 700); // Durée de l'animation
     incrementOxygen(1);
   };
 
   return (
     <PlantGrowthScreenContainer onPress={handlePress}>
-      <PlantGrowthScreenOverlay>
-        {bestAnimation && (
-          <PlantGrowthScreenItem1>
-            <LottieView
-              autoPlay
-              ref={animation}
-              style={{
-                width: bestAnimation.level >= 15 ? 150 : 100, // Ajuste la taille en fonction du niveau
-                height: bestAnimation.level >= 15 ? 150 : 100,
-              }}
-              source={bestAnimation.source}
-            />
-          </PlantGrowthScreenItem1>
-        )}
-      </PlantGrowthScreenOverlay>
+      <PlantGrowthScreenLayer>
+        <PlantGrowthScreenOverlay>
+          {bubbles.map((bubble) => (
+            <BubbleAnimation key={bubble.id} x={bubble.x} y={bubble.y} />
+          ))}
+          {bestAnimation && (
+            <PlantGrowthScreenItem1>
+              <LottieView
+                autoPlay
+                ref={animation}
+                style={{
+                  width: bestAnimation.width,
+                  height: bestAnimation.height,
+                }}
+                source={bestAnimation.source}
+              />
+            </PlantGrowthScreenItem1>
+          )}
+        </PlantGrowthScreenOverlay>
+      </PlantGrowthScreenLayer>
     </PlantGrowthScreenContainer>
   );
 };

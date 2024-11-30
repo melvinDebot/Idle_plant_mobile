@@ -4,7 +4,7 @@ export type ItemCardType = {
   levelRequired: number;
   levelMax: number;
   levelCard: number;
-  oxygenPerSeconds?: number; // Rendu optionnel
+  oxygenPerSeconds: number; // Rendu optionnel
   oxygenRequired?: number[]; // Rendu optionnel
   upgradeCost?: number[]; // Rendu optionnel
   type: string;
@@ -13,3 +13,5 @@ export type ItemCardType = {
 };
 
 export type ButtonType = "upgrade" | "timer" | "level" | string;
+
+export default {};

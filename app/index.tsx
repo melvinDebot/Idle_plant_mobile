@@ -43,7 +43,7 @@ export default function Index() {
     decrementOxygen,
     setActiveItems,
     incrementCardLevel,
-    // resetGame, 
+    resetGame, 
     dataGame
   } = useUserContext();
 
@@ -69,9 +69,9 @@ export default function Index() {
   const itemsToDisplay = activeItems.length > 0 ? activeItems : dataGame.cards;
 
   //RESET GAME
-  // useEffect(() => {
-  //   resetGame()
-  // }, [])
+  useEffect(() => {
+    resetGame()
+  }, [])
 
 
   const [loaded] = useFonts({
@@ -103,7 +103,7 @@ export default function Index() {
       <LayoutText>Booster</LayoutText>
       <LayoutBottom>
         <LayoutBottomScoll>
-          {itemsToDisplay.map((item: ItemCardType, index: number) => (
+          {itemsToDisplay.slice(0, 3).map((item: ItemCardType, index: number) => (
             <Card
               key={index}
               levelCardRequired={item.levelRequired}
@@ -116,6 +116,7 @@ export default function Index() {
               isDisabled={userLevel < item.levelRequired || currentOxygen < getOxygenRequired(item)}
               levelUser={userLevel}
               timer={item?.timer}
+              isOverlay={index === 2}
               onPress={() => handlePressItem(item)}
             />
           ))}

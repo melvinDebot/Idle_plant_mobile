@@ -6,6 +6,12 @@ export const PlantGrowthScreenContainer = styled(TouchableWithoutFeedback)`
   overflow: hidden;
 `;
 
+export const PlantGrowthScreenLayer = styled(View)`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+`;
+
 export const PlantGrowthScreenOverlay = styled(View)`
   width: 100%;
   height: 100%;
@@ -20,6 +26,8 @@ export const PlantGrowthScreenItem1 = styled(View)`
   height: 100%;
   align-items: center;
   justify-content: flex-end;
+  z-index: -1;
+
 `;
 
 export default {

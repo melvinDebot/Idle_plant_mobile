@@ -7,6 +7,8 @@ import {
 import oxygenImage from "../../../assets/images/Oxygen.png";
 import formatNumber from "../../utils/function";
 
+import {ImageSourcePropType} from "react-native";
+
 interface OxygenCounterProps {
   count: number;
 }
@@ -14,7 +16,7 @@ interface OxygenCounterProps {
 const OxygenCounter: React.FC<OxygenCounterProps> = ({ count }) => {
   return (
     <OxygenCounterContainer>
-      <OxygenCounterImage source={oxygenImage} />
+      <OxygenCounterImage source={oxygenImage as ImageSourcePropType} />
       <OxygenCounterText>{formatNumber(count)}</OxygenCounterText>
     </OxygenCounterContainer>
   );

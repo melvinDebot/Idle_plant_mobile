@@ -6,11 +6,15 @@ import {
   CardTitle,
   CardSubTitle,
   CardText,
+  CardOverlay,
+  CardWrapper
 } from "./style";
 
 import Button from "../Button/Button";
 
-import type {ButtonType} from "../../utils/type"
+import type { ButtonType } from "../../utils/type"
+
+import {ImageSourcePropType} from "react-native";
 
 interface CardProps {
   image: string;
@@ -24,6 +28,7 @@ interface CardProps {
   levelUser: number;
   timer?: string;
   onPress?: () => void;
+  isOverlay?: boolean;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -37,27 +42,36 @@ const Card: React.FC<CardProps> = ({
   timer,
   upgradeCost,
   levelCardRequired,
+  isOverlay,
   onPress
 }) => {
   return (
     <CardContainer>
-      <CardImage source={image} />
+      {isOverlay && <CardOverlay />}
+      <CardWrapper>
+      <CardImage source={image as ImageSourcePropType} />
       <CardTextContainer>
         <CardTitle>{title}</CardTitle>
         {/* TODO FIX LEVEL */}
         <CardSubTitle>Level  {level}</CardSubTitle>
         <CardText>{numberOxygen} oxygen / s</CardText>
       </CardTextContainer>
-      <Button
-        buttonType={levelUser < levelCardRequired ? "level" : buttonType}
-        isDisabled={isDisabled}
-        levelRequired={levelCardRequired}
-        oxygen={upgradeCost}
-        timer={timer ?? "00:00"}
-        onPress={onPress}
-      />
+      {level < 50 && (
+        <Button
+          buttonType={levelUser < levelCardRequired ? "level" : buttonType}
+          isDisabled={isDisabled}
+          levelRequired={levelCardRequired}
+          oxygen={upgradeCost}
+          timer={timer ?? "00:00"}
+          onPress={onPress}
+        />
+      )}
+      
+    </CardWrapper>
     </CardContainer>
+    
   );
 };
+
 
 export default Card;

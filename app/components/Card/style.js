@@ -4,13 +4,29 @@ import styled from "styled-components/native";
 export const CardContainer = styled(View)`
   width: 100%;
   height: 72px;
+  position: relative;
+  margin-top: 10px;
+`;
+
+export const CardWrapper = styled(View)`
   padding: 5px;
   flex-direction: row;
   align-items: center;
   justify-content: start;
   background-color: white;
   border-radius: 7px;
-  margin-top: 10px;
+`;
+
+export const CardOverlay = styled(View)`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: white;
+  opacity: 0.9;
+  border-radius: 7px;
+  bottom: 0px;
+  left: 0;
+  z-index: 999;
 `;
 
 export const CardImage = styled(Image)`
