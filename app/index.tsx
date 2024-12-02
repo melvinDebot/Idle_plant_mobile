@@ -6,7 +6,7 @@ import {
   LayoutBottomScoll,
 } from "./style";
 import { useFonts } from "expo-font";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import OxygenCounter from "./components/OxygenCounter/OxygenCounter";
 import LevelIndicator from "./components/LevelIndicator/LevelIndicator";
@@ -31,10 +31,7 @@ import { useUserContext } from "./context/UserContext";
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet } from "react-native";
 
-import * as SplashScreen from 'expo-splash-screen';
 
-// Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync();
 
 
 
@@ -51,11 +48,10 @@ export default function Index() {
     decrementOxygen,
     setActiveItems,
     incrementCardLevel,
-    resetGame, 
+    // resetGame, 
     dataGame
   } = useUserContext();
 
-  const [appIsReady, setAppIsReady] = useState(false);
 
   const insets = useSafeAreaInsets();
 
@@ -80,26 +76,19 @@ export default function Index() {
 
   const itemsToDisplay = activeItems.length > 0 ? activeItems : dataGame.cards;
 
-  //RESET GAME
-  useEffect(() => {
-    resetGame()
-  }, [])
+  //RESET GAME FOR DEBUG
+  // useEffect(() => {
+  //   resetGame()
+  // }, [])
 
 
-  const [fontsLoaded] = useFonts({
+  const [loaded] = useFonts({
     GalanoGrotesqueMedium,
     GalanoGrotesqueRegular,
     GalanoGrotesqueSemiBold,
   });
 
-  useEffect(() => {
-    if (fontsLoaded) {
-      setAppIsReady(true);
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!appIsReady) {
+  if (!loaded) {
     return null;
   }
 
