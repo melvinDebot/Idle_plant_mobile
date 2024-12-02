@@ -8,6 +8,7 @@ import rainImg from "../../assets/images/cards/rain.png"
 import sprayImg from "../../assets/images/cards/spray.png"
 import sunImg from "../../assets/images/cards/sun.png"
 import weedImg from "../../assets/images/cards/weed.png"
+import lightImg from "../../assets/images/cards/light.png"
 
 export default function getImageCard(imagePath: string) { 
   switch (imagePath) {
@@ -31,6 +32,8 @@ export default function getImageCard(imagePath: string) {
       return sunImg;
     case "weed":
       return weedImg;
+    case "light":
+      return lightImg;
     default:
       return "";
   }

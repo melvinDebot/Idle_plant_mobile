@@ -53,7 +53,7 @@ const Card: React.FC<CardProps> = ({
       <CardTextContainer>
         <CardTitle>{title}</CardTitle>
         {/* TODO FIX LEVEL */}
-        <CardSubTitle>Level  {level}</CardSubTitle>
+        <CardSubTitle>Niveau  {level}</CardSubTitle>
         <CardText>{numberOxygen} oxygen / s</CardText>
       </CardTextContainer>
       {level < 50 && (

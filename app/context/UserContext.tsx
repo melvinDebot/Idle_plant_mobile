@@ -90,7 +90,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   // Mettre à jour totalOxygenForNextLevel en fonction du niveau de l'utilisateur
   useEffect(() => {
     const nextLevel = userLevel + 1;
-    setTotalOxygenForNextLevel(oxygenRequirements[nextLevel] || totalOxygenForNextLevel * 1.2);
+    setTotalOxygenForNextLevel(oxygenRequirements[nextLevel] || totalOxygenForNextLevel * 1);
   }, [userLevel]);
 
   const incrementOxygen = (amount: number) => {

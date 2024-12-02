@@ -22,7 +22,7 @@ const LevelIndicator: React.FC<LevelIndicatorProps> = ({
 
   return (
     <LevelIndicatorContainer>
-      <LevelIndicatorText>Level {level}</LevelIndicatorText>
+      <LevelIndicatorText>Niveau {level}</LevelIndicatorText>
       <LevelIndicatorBarContainer>
         <LevelIndicatorBar>
           <LevelIndicatorBarOverlay style={{ width: `${progress}%` }} />

@@ -96,7 +96,7 @@ const Button: React.FC<LevelIndicatorProps> = ({
       return (
         <ButtonContainer disabled={isDisabled} onPress={onPress}>
           <ButtonContainerText>
-            <ButtonText>Upgrade</ButtonText>
+            <ButtonText>Amélioration</ButtonText>
             <ButtonContainerOxygenText>
               <ButtonImage source={oxygenImage} />
               <ButtonText>{formatNumber(oxygen)}</ButtonText>
@@ -128,7 +128,7 @@ const Button: React.FC<LevelIndicatorProps> = ({
     case "level":
       return (
         <ButtonContainer disabled={true}>
-          <ButtonText>Level {levelRequired}</ButtonText>
+          <ButtonText>Niveau {levelRequired}</ButtonText>
         </ButtonContainer>
       );
 
