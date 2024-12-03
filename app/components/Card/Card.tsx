@@ -56,7 +56,7 @@ const Card: React.FC<CardProps> = ({
         <CardSubTitle>Niveau  {level}</CardSubTitle>
         <CardText>{numberOxygen} oxygen / s</CardText>
       </CardTextContainer>
-      {level < 50 && (
+      {level < 100 && (
         <Button
           buttonType={levelUser < levelCardRequired ? "level" : buttonType}
           isDisabled={isDisabled}
