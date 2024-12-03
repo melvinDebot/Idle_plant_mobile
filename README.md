@@ -85,6 +85,38 @@ npm run lint
 
 ---
 
+## Deploy on the store
+
+### Install the latest EAS CLI
+
+EAS CLI is the command-line app that you will use to interact with EAS services from your terminal. To install it, run the command:
+
+```bash
+  npm install -g eas-cli
+```
+
+### Log in to your Expo account
+If you are already signed in to an Expo account using Expo CLI, you can skip the steps described in this section. If you are not, run the following command to log in:
+```bash
+  eas login
+```
+
+After you have confirmed that you have a Google Play Store or Apple App Store account and decided whether or not EAS CLI should handle app signing credentials, you can proceed with the following set of commands to build for the platform's store:
+```bash
+  eas build --platform all
+```
+
+### For Play Store
+```bash
+  eas build --platform android
+```
+### For App Store
+```bash
+  eas build --platform ios
+```
+
+---
+
 ## 🛠️ Fonctionnalités
 
 - **Arrosage, pulvérisation et engrais** : Augmentez la production d'oxygène.
