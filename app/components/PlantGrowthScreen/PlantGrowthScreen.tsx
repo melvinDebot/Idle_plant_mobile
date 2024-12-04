@@ -17,13 +17,18 @@ import treeAnimation from "../../../assets/animation/tree_animation.json";
 
 // Import des animations screen
 import waterCanAnimation from "../../../assets/animation/water_can.json";
+import sprayImg from "../../../assets/images/screen/spray.png";
+import fertilizerImg from "../../../assets/images/screen/Fertilizer.png";
+import weedImg from "../../../assets/images/screen/weed.png";
+
+// Import des animations screen timer
 import beeAnimation from "../../../assets/animation/bee.json";
 import sunAnimation from "../../../assets/animation/sun.json";
 
 // Import context pour récupérer les données de l'utilisateur
 import { useUserContext } from "@/app/context/UserContext";
 
-import { GestureResponderEvent } from "react-native";
+import { GestureResponderEvent, Image } from "react-native";
 
 import BubbleAnimation from "../Bubble/Bubble";
 import LayoutAnimation from "../LayoutAnimation/LayoutAnimation";
@@ -47,6 +52,7 @@ interface AnimationScreenData {
   right?: number;
   bottom?: number;
   imageKey: string;
+  timer?: string;
 }
 
 interface Bubble {
@@ -57,10 +63,14 @@ interface Bubble {
 
 interface PlantGrowthScreenProps {
   levelUser: number;
+  activeTimerItems: ItemCardType[];
 }
 
-const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({ levelUser }) => {
-  const { incrementOxygen, activeItems } = useUserContext();
+const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({
+  levelUser,
+  activeTimerItems,
+}) => {
+  const { incrementOxygen, activeItems, isVibration } = useUserContext();
   const animation = useRef<LottieView>(null);
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
 
@@ -101,6 +111,33 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({ levelUser }) => {
   // Liste des animations screen
   const animationListScreen: AnimationScreenData[] = [
     {
+      width: 50,
+      height: 50,
+      source: sprayImg,
+      right: 50,
+      bottom: 20,
+      imageKey: "spray",
+    },
+    {
+      width: 50,
+      height: 50,
+      source: fertilizerImg,
+      left: 20,
+      bottom: 0,
+      imageKey: "fertilizer",
+    },
+    {
+      width: 50,
+      height: 50,
+      source: weedImg,
+      right: 90,
+      bottom: -10,
+      imageKey: "weed",
+    },
+  ];
+
+  const animationScreenTimer: AnimationScreenData[] = [
+    {
       width: 100,
       height: 100,
       source: waterCanAnimation,
@@ -123,7 +160,6 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({ levelUser }) => {
       right: 0,
       top: 0,
       imageKey: "sun",
-
     },
   ];
 
@@ -132,14 +168,6 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({ levelUser }) => {
     return animationList
       .filter((animation) => levelUser >= animation.level)
       .sort((a, b) => b.level - a.level)[0]; // Prend la dernière animation disponible
-  };
-
-  // Fonction pour obtenir la source de l'animation
-  const getAnimationScreen = (item: ItemCardType) => {
-    const animation = animationListScreen.find(
-      (anim) => anim.imageKey === item.imageKey
-    );
-    return animation ? animation.source : null;
   };
 
   // Animation à afficher, qui est la plus avancée en fonction du niveau
@@ -161,7 +189,10 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({ levelUser }) => {
     };
 
     // Utilisez un retour haptique de type "impact" avec force
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (isVibration) {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+
     // Ajoutez la bulle à l'état
     setBubbles((prevBubbles) => [...prevBubbles, newBubble]);
 
@@ -201,7 +232,6 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({ levelUser }) => {
               (anim) => anim.imageKey === item.imageKey
             );
             if (animationScreen) {
-              
               return (
                 <LayoutAnimation
                   key={item.id}
@@ -212,17 +242,41 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({ levelUser }) => {
                   right={animationScreen.right}
                   bottom={animationScreen.bottom}
                 >
-                  <LottieView
-                    autoPlay
+                  <Image
+                    source={animationScreen.source}
                     style={{
                       width: animationScreen.width,
                       height: animationScreen.height,
                     }}
-                    source={getAnimationScreen(item)}
                   />
                 </LayoutAnimation>
               );
             }
+          }
+          return null;
+        })}
+
+        {activeTimerItems.map((item) => {
+          const animationScreen = animationScreenTimer.find(
+            (anim) => anim.imageKey === item.imageKey
+          );
+          if (animationScreen) {
+            return (
+              <LottieView
+                key={item.id}
+                autoPlay
+                style={{
+                  width: animationScreen.width,
+                  height: animationScreen.height,
+                  position: "absolute",
+                  top: animationScreen.top,
+                  left: animationScreen.left,
+                  right: animationScreen.right,
+                  bottom: animationScreen.bottom,
+                }}
+                source={animationScreen.source}
+              />
+            );
           }
           return null;
         })}

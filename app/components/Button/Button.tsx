@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
+import { View, ImageSourcePropType } from "react-native";
+
 import {
   ButtonContainer,
   ButtonText,
@@ -41,7 +42,8 @@ const Button: React.FC<LevelIndicatorProps> = ({
 
   // Fonction pour démarrer le timer
   const startTimer = () => {
-    if (!isTimerActive) {
+    if (!isTimerActive && onPress) {
+      onPress()
       setIsTimerActive(true);
       const [minutes, seconds] = timer.split(":").map(Number);
       let totalSeconds = minutes * 60 + seconds;
@@ -98,7 +100,20 @@ const Button: React.FC<LevelIndicatorProps> = ({
           <ButtonContainerText>
             <ButtonText>Amélioration</ButtonText>
             <ButtonContainerOxygenText>
-              <ButtonImage source={oxygenImage} />
+              <ButtonImage source={oxygenImage as ImageSourcePropType} />
+              <ButtonText>{formatNumber(oxygen)}</ButtonText>
+            </ButtonContainerOxygenText>
+          </ButtonContainerText>
+        </ButtonContainer>
+      );
+    
+    case "decoration":
+      return (
+        <ButtonContainer disabled={isDisabled} onPress={onPress}>
+          <ButtonContainerText>
+            <ButtonText>Amélioration</ButtonText>
+            <ButtonContainerOxygenText>
+              <ButtonImage source={oxygenImage as ImageSourcePropType} />
               <ButtonText>{formatNumber(oxygen)}</ButtonText>
             </ButtonContainerOxygenText>
           </ButtonContainerText>

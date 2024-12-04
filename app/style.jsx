@@ -34,14 +34,25 @@ export const LayoutBottom = styled(View)`
 `;
 
 export const LayoutBottomScoll = styled(ScrollView)`
-
-
 `;
+
+export const TabsContainer = styled(View)`
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #f4faeb;
+  gap: 10px;
+  margin-bottom: 10px;
+`
 
 export default {
   LayoutTop,
   LayoutMiddle,
   LayoutBottom,
   LayoutText,
-  LayoutBottomScoll
+  LayoutBottomScoll,
+  TabsContainer
 };

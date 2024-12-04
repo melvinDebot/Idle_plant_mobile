@@ -9,6 +9,7 @@ type UserContextType = {
   totalOxygenForNextLevel: number; // Quantité totale d'oxygène nécessaire pour passer au niveau suivant
   currentOxygenForNextLevel: number; // Progrès accumulé vers le niveau suivant
   activeItems: ItemCardType[]; // Liste des items actifs
+  isVibration: boolean; // État de vibration de l'utilisateur
   incrementOxygen: (amount: number) => void; // Fonction pour ajouter de l'oxygène
   incrementLevel: () => void; // Fonction pour augmenter le niveau utilisateur
   getOxygenPerSeconds: (item: ItemCardType) => number; // Fonction pour récupérer oxygenPerSeconds
@@ -19,6 +20,8 @@ type UserContextType = {
   incrementCardLevel: (item: ItemCardType) => void; // Fonction pour augmenter le niveau de la carte
   resetGame: () => void; // Fonction pour réinitialiser le jeu
   dataGame: { cards: ItemCardType[] }; // Données de jeu
+  startTimer: (item: ItemCardType) => void; // Fonction pour démarrer le timer
+  setVibrationUser: () => void; // Fonction pour activer/désactiver la vibration
 };
 
 // Création du contexte
@@ -31,7 +34,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [progressOxygen, setProgressOxygen] = useState<number>(0); // Progrès d'oxygène accumulé
   const [totalOxygenForNextLevel, setTotalOxygenForNextLevel] = useState<number>(100); // Oxygène requis pour passer au niveau suivant
   const [activeItems, setActiveItems] = useState<ItemCardType[]>(dataJson.cards); // Liste des items actifs
-  const [dataGame, setDataGame] = useState<{ cards: ItemCardType[] }>({cards: dataJson.cards});
+  const [dataGame, setDataGame] = useState<{ cards: ItemCardType[] }>({ cards: dataJson.cards });
+  const [timerActive, setTimerActive] = useState<boolean>(false);
+  const [timerItem, setTimerItem] = useState<ItemCardType | null>(null);
+  const [isVibration, setIsVibration] = useState<boolean>(true);
 
   const currentOxygenForNextLevel = Math.min(progressOxygen, totalOxygenForNextLevel);
 
@@ -46,6 +52,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const loadData = async () => {
       try {
         const savedLevel = await AsyncStorage.getItem("userLevel");
+        const saveIsVibration = await AsyncStorage.getItem("isVibration");
         const savedOxygen = await AsyncStorage.getItem("currentOxygen");
         const savedProgress = await AsyncStorage.getItem("progressOxygen");
         const savedTotal = await AsyncStorage.getItem("totalOxygenForNextLevel");
@@ -53,6 +60,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         const savedDataGame = await AsyncStorage.getItem("dataGame");
 
         if (savedLevel !== null) setUserLevel(parseInt(savedLevel, 10));
+        if (saveIsVibration !== null) setIsVibration(JSON.parse(saveIsVibration));
         if (savedOxygen !== null) setCurrentOxygen(parseInt(savedOxygen, 10));
         if (savedProgress !== null) setProgressOxygen(parseInt(savedProgress, 10));
         if (savedTotal !== null) setTotalOxygenForNextLevel(parseInt(savedTotal, 10));
@@ -174,7 +182,34 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     return item.upgradeCost[index];
   };
 
-  
+  const setVibrationUser = () => {
+    setIsVibration(!isVibration);
+    AsyncStorage.setItem("isVibration", JSON.stringify(!isVibration));
+  }
+
+  const startTimer = (item: ItemCardType) => {
+    setTimerActive(true);
+    setTimerItem(item);
+  };
+
+  useEffect(() => {
+  let timerInterval: NodeJS.Timeout;
+  if (timerActive && timerItem && timerItem.timer) {
+    const [minutes, seconds] = timerItem.timer.split(":").map(Number);
+    const duration = (minutes * 60 + seconds) * 1000; // Convertir le temps en millisecondes
+
+    timerInterval = setInterval(() => {
+      incrementOxygen(timerItem.oxygenPerSeconds);
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(timerInterval);
+      setTimerActive(false);
+      setTimerItem(null);
+    }, duration);
+  }
+  return () => clearInterval(timerInterval);
+}, [timerActive, timerItem]);
 
   const resetGame = async () => {
     try {
@@ -219,6 +254,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     currentOxygenForNextLevel,
     activeItems,
     dataGame,
+    isVibration,
     incrementOxygen,
     decrementOxygen,
     incrementLevel,
@@ -227,7 +263,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     getUpgradeCost,
     setActiveItems,
     incrementCardLevel,
-    resetGame
+    resetGame,
+    startTimer,
+    setVibrationUser
   };
 
   return (

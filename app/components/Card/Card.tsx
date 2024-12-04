@@ -53,7 +53,7 @@ const Card: React.FC<CardProps> = ({
       <CardTextContainer>
         <CardTitle>{title}</CardTitle>
         {/* TODO FIX LEVEL */}
-        <CardSubTitle>Niveau  {level}</CardSubTitle>
+        {buttonType !== "timer" && (<CardSubTitle>Niveau  {level}</CardSubTitle>)} 
         <CardText>{numberOxygen} oxygen / s</CardText>
       </CardTextContainer>
       {level < 100 && (
