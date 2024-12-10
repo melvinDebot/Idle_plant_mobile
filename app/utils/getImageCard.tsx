@@ -9,6 +9,9 @@ import sprayImg from "../../assets/images/cards/spray.png"
 import sunImg from "../../assets/images/cards/sun.png"
 import weedImg from "../../assets/images/cards/weed.png"
 import lightImg from "../../assets/images/cards/light.png"
+import cutWeedImg from "../../assets/images/cards/cut_weed.png"
+import insecticideImg from "../../assets/images/cards/insecticide.png"
+import phTestImg from "../../assets/images/cards/ph_test.png"
 
 export default function getImageCard(imagePath: string) { 
   switch (imagePath) {
@@ -34,6 +37,12 @@ export default function getImageCard(imagePath: string) {
       return weedImg;
     case "light":
       return lightImg;
+    case "cut_weed":
+      return cutWeedImg;
+    case "insecticide":
+      return insecticideImg;
+    case "ph_test":
+      return phTestImg;
     default:
       return "";
   }

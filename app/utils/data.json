@@ -7,8 +7,8 @@
       "levelMax": 100,
       "levelCard": 0,
       "oxygenPerSeconds": 2,
-      "oxygenRequired": [10, 15, 30, 50],
-      "upgradeCost": [8, 12, 25, 40],
+      "oxygenRequired": [10, 15, 30, 100],
+      "upgradeCost": [8, 12, 25, 50],
       "type": "upgrade",
       "imageKey": "spray"
     },
@@ -19,10 +19,10 @@
       "levelMax": 100,
       "levelCard": 0,
       "oxygenPerSeconds": 4,
-      "oxygenRequired": [40],
+      "oxygenRequired": [100],
       "upgradeCost": [15],
       "type": "timer",
-      "timer": "00:10",
+      "timer": "00:60",
       "imageKey": "watering_can"
     },
     {
@@ -32,43 +32,67 @@
       "levelMax": 100,
       "levelCard": 0,
       "oxygenPerSeconds": 6,
-      "oxygenRequired": [90, 180, 360, 700],
+      "oxygenRequired": [90, 180, 360, 1000],
       "upgradeCost": [30, 80, 150, 250],
       "type": "upgrade",
       "imageKey": "fertilizer"
     },
     {
-      "id": 6,
-      "title": "Mauvaises herbes",
+      "id": 4,
+      "title": "Couper les herbes",
       "levelRequired": 10,
       "levelMax": 100,
       "levelCard": 0,
+      "oxygenPerSeconds": 10,
+      "oxygenRequired": [120, 240, 480, 2060],
+      "upgradeCost": [40, 80, 160, 320],
+      "type": "upgrade",
+      "imageKey": "cut_weed"
+    },
+    {
+      "id": 5,
+      "title": "Mauvaises herbes",
+      "levelRequired": 15,
+      "levelMax": 100,
+      "levelCard": 0,
       "oxygenPerSeconds": 12,
-      "oxygenRequired": [150, 300, 600, 1200],
+      "oxygenRequired": [150, 300, 600, 5200],
       "upgradeCost": [50, 100, 200, 400],
       "type": "upgrade",
       "imageKey": "weed"
     },
     {
-      "id": 7,
+      "id": 6,
       "title": "Changer de pot",
       "levelRequired": 30,
       "levelMax": 100,
       "levelCard": 0,
       "oxygenPerSeconds": 20,
-      "oxygenRequired": [400, 800, 1600, 3000],
+      "oxygenRequired": [400, 800, 1600, 7000],
       "upgradeCost": [80, 160, 320, 600],
       "type": "decoration",
       "imageKey": "pot"
     },
     {
+      "id": 7,
+      "title": "Insecticides",
+      "levelRequired": 40,
+      "levelMax": 100,
+      "levelCard": 0,
+      "oxygenPerSeconds": 25,
+      "oxygenRequired": [1000, 2000, 4000, 8700],
+      "upgradeCost": [150, 300, 500, 800],
+      "type": "upgrade",
+      "imageKey": "insecticide"
+    },
+    {
       "id": 8,
       "title": "Fruit",
-      "levelRequired": 30,
+      "levelRequired": 50,
       "levelMax": 100,
       "levelCard": 0,
       "oxygenPerSeconds": 30,
-      "oxygenRequired": [800, 1600, 3200, 6000],
+      "oxygenRequired": [800, 1600, 3200, 10500],
       "upgradeCost": [150, 300, 600, 1000],
       "type": "upgrade",
       "imageKey": "fruit"
@@ -83,7 +107,7 @@
       "oxygenRequired": [1500],
       "upgradeCost": [200],
       "type": "timer",
-      "timer": "00:10",
+      "timer": "04:00",
       "imageKey": "sun"
     },
     {
@@ -105,7 +129,7 @@
       "levelMax": 100,
       "levelCard": 0,
       "oxygenPerSeconds": 75,
-      "oxygenRequired": [8000, 15000, 30000, 60000],
+      "oxygenRequired": [8000, 15000, 30000, 160000],
       "upgradeCost": [2000, 4000, 7000, 10000],
       "type": "upgrade",
       "imageKey": "light"
@@ -120,8 +144,20 @@
       "oxygenRequired": [5500],
       "upgradeCost": [800],
       "type": "timer",
-      "timer": "00:10",
+      "timer": "10:00",
       "imageKey": "pollinator"
+    },
+    {
+      "id": 13,
+      "title": "Test pH",
+      "levelRequired": 95,
+      "levelMax": 100,
+      "levelCard": 0,
+      "oxygenPerSeconds": 120,
+      "oxygenRequired": [10000, 20000, 40000, 180000],
+      "upgradeCost": [3000, 6000, 9000, 12000],
+      "type": "upgrade",
+      "imageKey": "ph_test"
     }
   ]
 }

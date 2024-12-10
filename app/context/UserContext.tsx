@@ -115,19 +115,21 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
-  const incrementLevel = () => {
+ const incrementLevel = () => {
     setUserLevel((prevLevel) => {
       const newLevel = prevLevel + 1;
       if (newLevel >= 100) {
         return 100; // Niveau maximum
       }
+      AsyncStorage.setItem("userLevel", newLevel.toString());
       return newLevel;
     });
 
     setTotalOxygenForNextLevel((prevTotal) => {
-      // Ajustez la logique selon vos besoins pour ralentir la progression
-      const newTotal = prevTotal * 1.2; // Par exemple, augmentez de 20% à chaque niveau
-      return Math.floor(newTotal);
+      // Multipliez par 2 à chaque niveau
+      const newTotal = prevTotal * 2;
+      AsyncStorage.setItem("totalOxygenForNextLevel", newTotal.toString());
+      return newTotal;
     });
   };
 

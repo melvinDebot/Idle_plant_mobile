@@ -1,6 +1,8 @@
 import { View, Text, ScrollView } from "react-native";
 import styled from "styled-components/native";
 
+
+
 export const LayoutTop = styled(View)`
   flex: 0.3;
   display: flex;
@@ -18,7 +20,7 @@ export const LayoutMiddle = styled(View)`
 
 export const LayoutText = styled(Text)`
   font-size: 21px;
-  color: black;
+  color: ${(props) => props.theme.text};
   font-family: GalanoGrotesqueSemiBold;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -27,7 +29,7 @@ export const LayoutText = styled(Text)`
 
 export const LayoutBottom = styled(View)`
   flex: 3;
-  background-color: #f4faeb;
+  background-color: ${(props) => props.theme.backgroundScreen};
   border-radius: 11px;
   padding: 10px;
   
@@ -49,6 +51,7 @@ export const TabsContainer = styled(View)`
 `
 
 export default {
+
   LayoutTop,
   LayoutMiddle,
   LayoutBottom,

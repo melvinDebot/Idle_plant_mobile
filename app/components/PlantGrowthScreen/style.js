@@ -17,7 +17,7 @@ export const PlantGrowthScreenOverlay = styled(View)`
   width: 100%;
   height: 100%;
   border-radius: 30px;
-  background-color: #e6f3d4;
+  background-color: ${(props) => props.theme.backgroundScreen};
   position: relative;
   overflow: hidden;
 `;
@@ -28,7 +28,6 @@ export const PlantGrowthScreenItem1 = styled(View)`
   align-items: center;
   justify-content: flex-end;
   z-index: -1;
-
 `;
 
 export default {

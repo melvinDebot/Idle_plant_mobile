@@ -5,7 +5,7 @@ export const OxygenCounterContainer = styled(View)`
   width: 103px;
   height: 26px;
   border-radius: 3px;
-  background-color: #e6f3d4;
+  background-color: ${(props) => props.theme.backgroundScreen};
   flex-direction: row;
   justify-content: start;
   align-items: center;
@@ -16,15 +16,13 @@ export const OxygenCounterContainer = styled(View)`
 
 export const OxygenCounterText = styled(Text)`
   font-size: 15px;
-  color: black;
+  color: ${(props) => props.theme.text};
   font-family: GalanoGrotesqueSemiBold;
-
 `;
 
 export const OxygenCounterImage = styled(Image)`
   width: 15px;
   height: 15px;
-
 `;
 
 export default {

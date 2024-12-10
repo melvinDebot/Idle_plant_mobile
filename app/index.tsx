@@ -33,6 +33,9 @@ import { useUserContext } from "./context/UserContext";
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { SignalIcon } from "react-native-heroicons/solid";
+import {useColorScheme} from "react-native";
+
+
 
 
 export default function Index() {
@@ -58,6 +61,10 @@ export default function Index() {
   const [indexActive, setIndexActive] = useState(0); // Onglet actif par défaut
   const [activeTimerItems, setActiveTimerItems] = useState<ItemCardType[]>([]); // État pour les items timer actifs
   const insets = useSafeAreaInsets();
+
+  const scheme = useColorScheme();
+  const background = scheme === "dark" ? "#1B1B1B" : "white";
+  
 
   const handlePressItem = (item: ItemCardType) => {
     if (item.type === "timer") {
@@ -126,7 +133,7 @@ export default function Index() {
 
 
   return (
-    <SafeAreaView style={[styles.layoutContainer, { paddingTop: insets.top }]}>
+    <SafeAreaView style={[styles.layoutContainer, { paddingTop: insets.top, backgroundColor: background }]}>
       <LayoutTop>
         <TouchableOpacity onPress={() => setVibrationUser()}>
           <SignalIcon fill={isVibration ? "#568828" : "grey"} size={30}/>
@@ -144,10 +151,9 @@ export default function Index() {
       </LayoutMiddle>
       <LayoutText>Boosters</LayoutText>
       <LayoutBottom>
-        <TabsContainer>
+        <TabsContainer style={{backgroundColor : "transparent"}}>
           <Tabs index={0} indexActive={indexActive} text="Actions" onPress={() => handleTabPress(0)} />
           <Tabs index={1} indexActive={indexActive} text="Timer" onPress={() => handleTabPress(1)} />
-          <Tabs index={2} indexActive={indexActive} text="Décoration" onPress={() => handleTabPress(2)}/>
         </TabsContainer>
         <LayoutBottomScoll
           showsVerticalScrollIndicator={false}
@@ -181,7 +187,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     padding: 10,
-    backgroundColor: "white",
-    justifyContent: "flex-start",
   },
 });

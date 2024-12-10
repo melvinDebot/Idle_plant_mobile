@@ -11,7 +11,7 @@ export const TabsContainer = styled(TouchableOpacity)`
 
 export const TabsText = styled(Text)`
   font-size: 12px;
-  color: black;
+  color: ${(props) => props.theme.tabs.text};
   font-family: GalanoGrotesqueMedium;
 `;
 

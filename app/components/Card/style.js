@@ -13,7 +13,7 @@ export const CardWrapper = styled(View)`
   flex-direction: row;
   align-items: center;
   justify-content: start;
-  background-color: white;
+  background-color: ${(props) => props.theme.card.background};
   border-radius: 7px;
 `;
 
@@ -45,19 +45,19 @@ export const CardTextContainer = styled(View)`
 
 export const CardTitle = styled(Text)`
   font-size: 12px;
-  color: black;
+  color: ${(props) => props.theme.text};
   font-family: GalanoGrotesqueSemiBold;
 `;
 
 export const CardSubTitle = styled(Text)`
   font-size: 12px;
-  color: black;
+  color: ${(props) => props.theme.text};
   font-family: GalanoGrotesqueRegular;
 `;
 
 export const CardText = styled(Text)`
   font-size: 12px;
-  color: #568828;
+  color: ${(props) => props.theme.card.subtitle};
   font-family: GalanoGrotesqueRegular;
 `;
 

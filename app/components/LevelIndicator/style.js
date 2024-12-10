@@ -9,7 +9,7 @@ export const LevelIndicatorContainer = styled(View)`
 
 export const LevelIndicatorText = styled(Text)`
   font-size: 16px;
-  color: black;
+  color: ${(props) => props.theme.text};
   font-family: GalanoGrotesqueSemiBold;
 `;
 

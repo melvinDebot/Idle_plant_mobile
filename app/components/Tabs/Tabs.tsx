@@ -1,5 +1,6 @@
 import { TabsContainer, TabsText } from "./style";
 import React from "react";
+import { useColorScheme } from "react-native";
 
 interface TabsProps {
   index: number;
@@ -9,16 +10,26 @@ interface TabsProps {
 }
 
 const Tabs = ({ index, indexActive, text, onPress }: TabsProps) => {
+  const scheme = useColorScheme();
+  const isActive = indexActive === index;
+
+  const backgroundColor = isActive
+    ? scheme === "dark"
+      ? "#568828"
+      : "#568828"
+    : scheme === "dark"
+    ? "transparent"
+    : "white";
+
+  const textColor = isActive
+    ? "white"
+    : scheme === "dark"
+    ? "#E6F3D4"
+    : "black";
+
   return (
-    <TabsContainer
-      onPress={onPress}
-      style={{
-        backgroundColor: indexActive === index ? "#568828" : "#FFFFFF",
-      }}
-    >
-      <TabsText style={{
-        color: indexActive === index ? "#FFFFFF" : "#000000",
-      }}>{text}</TabsText>
+    <TabsContainer onPress={onPress} style={{ backgroundColor }}>
+      <TabsText style={{ color: textColor }}>{text}</TabsText>
     </TabsContainer>
   );
 };
