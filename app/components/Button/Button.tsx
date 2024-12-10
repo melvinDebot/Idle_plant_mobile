@@ -12,8 +12,11 @@ import {
 
 import oxygenImage from "../../../assets/images/Oxygen.png";
 
+import * as Haptics from "expo-haptics";
+
 import type { ButtonType } from "../../utils/type"
 import formatNumber from "../../utils/function";
+import { useUserContext } from "@/app/context/UserContext";
 
 interface LevelIndicatorProps {
   buttonType: ButtonType;
@@ -39,6 +42,8 @@ const Button: React.FC<LevelIndicatorProps> = ({
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timeout | null>(
     null
   );
+
+  const { isVibration } = useUserContext();
 
   // Fonction pour démarrer le timer
   const startTimer = () => {
@@ -93,10 +98,21 @@ const Button: React.FC<LevelIndicatorProps> = ({
     return `${widthPercentage}%`;
   };
 
+  const handlePress = async () => { 
+    // Utilisez un retour haptique de type "impact" avec force
+    if (isVibration) {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    }
+    if (onPress) {
+      onPress()
+    }
+    
+  }
+
   switch (buttonType) {
     case "upgrade":
       return (
-        <ButtonContainer disabled={isDisabled} onPress={onPress}>
+        <ButtonContainer disabled={isDisabled} onPress={handlePress}>
           <ButtonContainerText>
             <ButtonText>Amélioration</ButtonText>
             <ButtonContainerOxygenText>
@@ -109,7 +125,7 @@ const Button: React.FC<LevelIndicatorProps> = ({
     
     case "decoration":
       return (
-        <ButtonContainer disabled={isDisabled} onPress={onPress}>
+        <ButtonContainer disabled={isDisabled} onPress={handlePress}>
           <ButtonContainerText>
             <ButtonText>Amélioration</ButtonText>
             <ButtonContainerOxygenText>
