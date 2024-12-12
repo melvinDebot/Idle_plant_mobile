@@ -7,13 +7,14 @@ import {
   TabsContainer
 } from "./style";
 import { useFonts } from "expo-font";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import OxygenCounter from "./components/OxygenCounter/OxygenCounter";
 import LevelIndicator from "./components/LevelIndicator/LevelIndicator";
 import PlantGrowthScreen from "./components/PlantGrowthScreen/PlantGrowthScreen";
 import Card from "./components/Card/Card";
 import Tabs from "./components/Tabs/Tabs";
+import Guide from "./components/Guide/Guide";
 
 // FONTS
 import GalanoGrotesqueMedium from "../assets/fonts/GalanoGrotesque-Medium.ttf";
@@ -31,11 +32,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useUserContext } from "./context/UserContext";
 
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, Animated, Dimensions } from "react-native";
 import { SignalIcon } from "react-native-heroicons/solid";
-import {useColorScheme} from "react-native";
+import { useColorScheme } from "react-native";
+import { Text } from "react-native";
 
-
+const { width, height } = Dimensions.get("window");
 
 
 export default function Index() {
@@ -54,7 +56,7 @@ export default function Index() {
     incrementCardLevel,
     startTimer,
     setVibrationUser,
-    // resetGame, 
+    resetGame, 
     dataGame
   } = useUserContext();
 
@@ -62,8 +64,16 @@ export default function Index() {
   const [activeTimerItems, setActiveTimerItems] = useState<ItemCardType[]>([]); // État pour les items timer actifs
   const insets = useSafeAreaInsets();
 
+  const [showGuide, setShowGuide] = useState(false);
+  const [showText, setShowText] = useState(true);
+  const [guideOpacity] = useState(new Animated.Value(0)); // État pour l'opacité du guide
+
   const scheme = useColorScheme();
   const background = scheme === "dark" ? "#1B1B1B" : "white";
+
+  const circleSize = useRef(new Animated.Value(30)).current; // Taille initiale du cercle
+  const circleLeft = useRef(new Animated.Value(-37)).current; // Position initiale du cercle
+  const circleTop = useRef(new Animated.Value(37)).current; // Position initiale du cercle
   
 
   const handlePressItem = (item: ItemCardType) => {
@@ -92,6 +102,62 @@ export default function Index() {
     setIndexActive(index);
   };
 
+  const expandCircle = () => {
+    setShowText(false)
+    Animated.parallel([
+      Animated.timing(circleSize, {
+        toValue: Math.max(width, height),
+        duration: 500,
+        useNativeDriver: false,
+      }),
+      Animated.timing(circleLeft, {
+        toValue: width / 2 - Math.max(width, height) / 2,
+        duration: 500,
+        useNativeDriver: false,
+      }),
+      Animated.timing(circleTop, {
+        toValue: height / 2 - Math.max(width, height) / 2,
+        duration: 500,
+        useNativeDriver: false,
+      }),
+    ]).start(() => {
+      setShowGuide(true);
+      Animated.timing(guideOpacity, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+    });
+  };
+
+  const collapseCircle = () => {
+    setShowText(true)
+    Animated.parallel([
+      Animated.timing(guideOpacity, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(circleSize, {
+        toValue: 30,
+        duration: 500,
+        useNativeDriver: false,
+      }),
+      Animated.timing(circleLeft, {
+        toValue: -37,
+        duration: 500,
+        useNativeDriver: false,
+      }),
+      Animated.timing(circleTop, {
+        toValue: 37,
+        duration: 500,
+        useNativeDriver: false,
+      }),
+    ]).start(() => {
+      setShowGuide(false);
+    });
+  };
+
   useEffect(() => {
     const initializeActiveItems = async () => {
       const savedItems = await AsyncStorage.getItem("activeItems");
@@ -116,9 +182,9 @@ export default function Index() {
   });
 
   //RESET GAME FOR DEBUG
-  // useEffect(() => {
-  //   resetGame()
-  // }, [])
+  useEffect(() => {
+    resetGame()
+  }, [])
 
 
   const [loaded] = useFonts({
@@ -134,6 +200,18 @@ export default function Index() {
 
   return (
     <SafeAreaView style={[styles.layoutContainer, { paddingTop: insets.top, backgroundColor: background }]}>
+      {/* CREATE CIRCLE WITH ANIMATION */}
+        <TouchableOpacity onPress={expandCircle} style={{position: "absolute", top: 53, left: 50, zIndex: 990}}>
+        <Animated.View style={[styles.circle, { width: circleSize, height: circleSize, left: circleLeft, top: circleTop }]}>
+          {showText && <Text style={{color: "white", fontSize: 20}}>i</Text>}
+          </Animated.View>
+      </TouchableOpacity>
+      {showGuide && (
+        <Animated.View style={[styles.guide, { opacity: guideOpacity }]}>
+          <Guide onPress={collapseCircle} />
+        </Animated.View>
+      )}
+      
       <LayoutTop>
         <TouchableOpacity onPress={() => setVibrationUser()}>
           <SignalIcon fill={isVibration ? "#568828" : "grey"} size={30}/>
@@ -187,5 +265,26 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     padding: 10,
+    position: "relative",
+  },
+  circle: {
+    backgroundColor: "#6aa033",
+    borderRadius: 50, // Pour rendre le cercle
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+
+  },
+  guide: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: 999,
+    backgroundColor: "red",
+    width: width,
+    height: height,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

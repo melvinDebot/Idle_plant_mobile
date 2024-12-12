@@ -9,8 +9,7 @@ export const LayoutTop = styled(View)`
   justify-content: flex-end;
   align-items: center;
   flex-direction: row;
-  gap: 55px;
-
+  gap: 50px;
   margin-bottom: 20px;
 `;
 

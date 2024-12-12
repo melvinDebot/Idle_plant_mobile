@@ -12,6 +12,7 @@
       "type": "upgrade",
       "imageKey": "spray"
     },
+
     {
       "id": 2,
       "title": " Arroser la plante",
@@ -22,8 +23,21 @@
       "oxygenRequired": [100],
       "upgradeCost": [15],
       "type": "timer",
-      "timer": "00:60",
+      "timer": "00:30",
       "imageKey": "watering_can"
+    },
+    {
+      "id": 14,
+      "title": "Pluie",
+      "levelRequired": 10,
+      "levelMax": 100,
+      "levelCard": 0,
+      "oxygenPerSeconds": 10,
+      "oxygenRequired": [5500],
+      "upgradeCost": [800],
+      "type": "timer",
+      "timer": "00:60",
+      "imageKey": "rain"
     },
     {
       "id": 3,

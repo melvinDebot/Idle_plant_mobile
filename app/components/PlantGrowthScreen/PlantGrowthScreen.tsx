@@ -14,6 +14,7 @@ import flowerAnimation from "../../../assets/animation/Flower_animation.json";
 import firAnimation from "../../../assets/animation/fir_animation.json";
 import grassAnimation from "../../../assets/animation/grass_animation.json";
 import treeAnimation from "../../../assets/animation/tree_animation.json";
+import rainAnimation from "../../../assets/animation/rain_animation.json";
 
 // Import des animations screen
 import waterCanAnimation from "../../../assets/animation/water_can.json";
@@ -160,6 +161,14 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({
       right: 0,
       top: 0,
       imageKey: "sun",
+    },
+    {
+      width: 100,
+      height: 100,
+      source: rainAnimation,
+      left: 50,
+      top: 0,
+      imageKey: "rain",
     },
   ];
 
