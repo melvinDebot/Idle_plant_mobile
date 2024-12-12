@@ -32,7 +32,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useUserContext } from "./context/UserContext";
 
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { StyleSheet, TouchableOpacity, Animated, Dimensions } from "react-native";
+import { StyleSheet, TouchableOpacity, Animated, Dimensions, Platform } from "react-native";
 import { SignalIcon } from "react-native-heroicons/solid";
 import { useColorScheme } from "react-native";
 import { Text } from "react-native";
@@ -73,7 +73,7 @@ export default function Index() {
 
   const circleSize = useRef(new Animated.Value(30)).current; // Taille initiale du cercle
   const circleLeft = useRef(new Animated.Value(-37)).current; // Position initiale du cercle
-  const circleTop = useRef(new Animated.Value(37)).current; // Position initiale du cercle
+  const circleTop = useRef(new Animated.Value(41)).current; // Position initiale du cercle
   
 
   const handlePressItem = (item: ItemCardType) => {
@@ -144,12 +144,12 @@ export default function Index() {
         useNativeDriver: false,
       }),
       Animated.timing(circleLeft, {
-        toValue: -37,
+        toValue: Platform.OS === "ios" ? -37 : 0,
         duration: 500,
         useNativeDriver: false,
       }),
       Animated.timing(circleTop, {
-        toValue: 37,
+        toValue: Platform.OS === "ios" ? 41 : 0,
         duration: 500,
         useNativeDriver: false,
       }),
@@ -201,7 +201,7 @@ export default function Index() {
   return (
     <SafeAreaView style={[styles.layoutContainer, { paddingTop: insets.top, backgroundColor: background }]}>
       {/* CREATE CIRCLE WITH ANIMATION */}
-        <TouchableOpacity onPress={expandCircle} style={{position: "absolute", top: 53, left: 50, zIndex: 990}}>
+        <TouchableOpacity onPress={expandCircle} style={{position: "absolute", top: Platform.OS === "ios" ? 53 : 0, left: Platform.OS === "ios" ? 50 : 0, zIndex: 990}}>
         <Animated.View style={[styles.circle, { width: circleSize, height: circleSize, left: circleLeft, top: circleTop }]}>
           {showText && <Text style={{color: "white", fontSize: 20}}>i</Text>}
           </Animated.View>
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     padding: 10,
-    position: "relative",
+
   },
   circle: {
     backgroundColor: "#6aa033",
@@ -280,7 +280,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     zIndex: 999,
-    backgroundColor: "red",
     width: width,
     height: height,
     display: "flex",

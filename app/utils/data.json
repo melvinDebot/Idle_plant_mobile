@@ -26,19 +26,7 @@
       "timer": "00:30",
       "imageKey": "watering_can"
     },
-    {
-      "id": 14,
-      "title": "Pluie",
-      "levelRequired": 10,
-      "levelMax": 100,
-      "levelCard": 0,
-      "oxygenPerSeconds": 10,
-      "oxygenRequired": [5500],
-      "upgradeCost": [800],
-      "type": "timer",
-      "timer": "00:60",
-      "imageKey": "rain"
-    },
+    
     {
       "id": 3,
       "title": "Engrais",
@@ -172,6 +160,19 @@
       "upgradeCost": [3000, 6000, 9000, 12000],
       "type": "upgrade",
       "imageKey": "ph_test"
+    },
+    {
+      "id": 14,
+      "title": "Pluie",
+      "levelRequired": 10,
+      "levelMax": 100,
+      "levelCard": 0,
+      "oxygenPerSeconds": 10,
+      "oxygenRequired": [5500],
+      "upgradeCost": [800],
+      "type": "timer",
+      "timer": "00:60",
+      "imageKey": "rain"
     }
   ]
 }
