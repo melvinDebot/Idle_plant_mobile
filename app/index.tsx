@@ -56,7 +56,7 @@ export default function Index() {
     incrementCardLevel,
     startTimer,
     setVibrationUser,
-    // resetGame, 
+    resetGame, 
     dataGame
   } = useUserContext();
 
@@ -182,9 +182,9 @@ export default function Index() {
   });
 
   //RESET GAME FOR DEBUG
-  // useEffect(() => {
-  //   resetGame()
-  // }, [])
+  useEffect(() => {
+    resetGame()
+  }, [])
 
 
   const [loaded] = useFonts({

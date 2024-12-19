@@ -15,6 +15,7 @@ import firAnimation from "../../../assets/animation/fir_animation.json";
 import grassAnimation from "../../../assets/animation/grass_animation.json";
 import treeAnimation from "../../../assets/animation/tree_animation.json";
 import rainAnimation from "../../../assets/animation/rain_animation.json";
+import heartAnimation from "../../../assets/animation/heart_animation.json";
 
 // Import des animations screen
 import waterCanAnimation from "../../../assets/animation/water_can.json";
@@ -74,6 +75,8 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({
   const { incrementOxygen, activeItems, isVibration } = useUserContext();
   const animation = useRef<LottieView>(null);
   const [bubbles, setBubbles] = useState<Bubble[]>([]);
+  const [clickCount, setClickCount] = useState<number>(0);
+  const [showAnimation, setShowAnimation] = useState<boolean>(false);
 
   // Liste des animations importées avec leur niveau
   const animationList: AnimationData[] = [
@@ -142,7 +145,7 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({
       width: 100,
       height: 100,
       source: waterCanAnimation,
-      right: 50,
+      right: 80,
       bottom: 0,
       imageKey: "watering_can",
     },
@@ -189,6 +192,17 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({
     }
   }, [bestAnimation]);
 
+  useEffect(() => {
+    if (clickCount > 0) {
+      const timeout = setTimeout(() => {
+        setClickCount(0);
+        setShowAnimation(false);
+      }, 1000); // Réinitialisez le compteur de clics après 1 seconde d'inactivité
+
+      return () => clearTimeout(timeout);
+    }
+  }, [clickCount]);
+
   const handlePress = async (event: GestureResponderEvent) => {
     const { locationX, locationY } = event.nativeEvent;
     const newBubble: Bubble = {
@@ -212,12 +226,34 @@ const PlantGrowthScreen: React.FC<PlantGrowthScreenProps> = ({
       );
     }, 700); // Durée de l'animation
     incrementOxygen(1);
+
+    // Incrémentez le nombre de clics
+    setClickCount((prevCount) => {
+      const newCount = prevCount + 1;
+      if (newCount > 50) {
+        setShowAnimation(true);
+      }
+      return newCount;
+    });
   };
 
   return (
     <PlantGrowthScreenContainer onPress={handlePress}>
       <PlantGrowthScreenLayer>
         <PlantGrowthScreenOverlay>
+          {showAnimation && (
+            <LottieView
+              autoPlay
+              style={{
+                width: 100,
+                height: 100,
+                position: "absolute",
+                left: 100,
+                bottom: 0,
+              }}
+              source={heartAnimation}
+            />
+          )}
           {bubbles.map((bubble) => (
             <BubbleAnimation key={bubble.id} x={bubble.x} y={bubble.y} />
           ))}
