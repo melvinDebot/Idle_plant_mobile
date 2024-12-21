@@ -143,7 +143,7 @@ const Guide: React.FC<GuideProps> = ({ onPress }) => {
             {message.message}
           </GuideText>
           <GuideInput
-            placeholder="Entrez le code"
+            placeholder="Entrez le verset"
             value={inputValue}
             onChangeText={handleInputChange}
             onSubmitEditing={handleSubmit}
