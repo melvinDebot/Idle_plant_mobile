@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import styled from "styled-components/native";
 
 export const GuideContainer = styled(ScrollView)`
@@ -51,6 +58,24 @@ export const GuideButton = styled(TouchableOpacity)`
   z-index: 999;
 `;
 
+export const GuideInput = styled(TextInput)`
+  width: 100%;
+  height: 40px;
+  background-color: white;
+  border-radius: 7px;
+  padding: 10px;
+  margin-bottom: 30px;
+  color: #6aa033;
+  font-family: GalanoGrotesqueSemiBold;
+`;
+
+export const GuideContainerAnswer = styled(View)`
+  width: 100%;
+  padding: 20px;
+  background-color: white;
+  border-radius: 7px;
+`;
+
 export default {
   GuideContainer,
   GuideSldes,
@@ -58,4 +83,6 @@ export default {
   GuideTitle,
   GuideText,
   GuideButton,
+  GuideInput,
+  GuideContainerAnswer,
 };
